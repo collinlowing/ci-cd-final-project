@@ -56,3 +56,13 @@ spec:
           python -m pip install --upgrade pip wheel
           pip install -r requirements.txt
           nosetests $(params.args)
+---
+    - name: deploy
+      taskRef:
+        name: openshift-client
+        kind: ClusterTask
+      params:
+      - name: SCRIPT
+        value: "oc create deploy $(params.app-name) --image=$(params.build-image)"
+      runAfter:
+        - build
